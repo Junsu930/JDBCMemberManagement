@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<comment>board-query.xml file</comment>
+	<comment>board-query.xml file</comment>
+	<entry key="boardList">SELECT MEMBER_NO, BOARD_NO, BOARD_TITLE, MEMBER_NM, BOARD_CONTENT, CREATE_DT, READ_COUNT, DELETE_FL, (SELECT COUNT(*) FROM "COMMENT" c WHERE c.BOARD_NO = b.BOARD_NO ) COMMENT_COUNT
+FROM BOARD b
+JOIN "MEMBER" USING (MEMBER_NO)</entry>
+
 </properties>

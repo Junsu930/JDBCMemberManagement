@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-<comment>comment-query.xml file</comment>
+	<comment>comment-query.xml file</comment>
+	<entry key="commentList">SELECT COMMENT_NO, COMMENT_CONTENT, CREATE_DT, DELETE_FL, MEMBER_NO, BOARD_NO, MEMBER_NM FROM "COMMENT" JOIN "MEMBER" USING (MEMBER_NO) WHERE MEMBER_NO = ? ORDER BY CREATE_DT</entry>
 </properties>
