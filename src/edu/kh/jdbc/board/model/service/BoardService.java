@@ -76,4 +76,16 @@ public class BoardService {
 		return boardList;
 	}
 
+
+	public void count(Board board) {
+		int result = 0;
+		conn = getConnection();
+		result = dao.count(conn, board);
+		
+		
+		if(result>0) commit(conn);
+		else rollback(conn);
+		close(conn);
+	}
+
 }

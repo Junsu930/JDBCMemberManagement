@@ -174,8 +174,29 @@ public class BoardDAO {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
 		}
 		return boardList;
+	}
+
+	public int count(Connection conn, Board board) {
+		int result = 0;
+		try {
+			String sql = prop.getProperty("count");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, board.getBoardNO());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 
 }

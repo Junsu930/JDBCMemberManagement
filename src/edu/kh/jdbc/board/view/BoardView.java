@@ -128,13 +128,12 @@ public class BoardView {
 			System.out.print("게시글을 선택하세요 : ");
 			int input = sc.nextInt();
 			
-			
 			boolean flag = false;
 			
 			for(Board b : boardList) {
 				if(b.getBoardNO() == input) {
-					
 					board = b;
+					count(b);
 					System.out.printf("%d | %s | %s |  %s  | %d \n|   %s    |\n", b.getBoardNO(), b.getBoardTitle(), b.getMemberName(), b.getCreateDate(), b.getBoardCount(), b.getBoardContent());
 					System.out.println("================================");
 					comList = cService.commentList(b.getBoardNO());
@@ -229,6 +228,7 @@ public class BoardView {
 			if(b.getBoardNO() == input) {
 				
 				board = b;
+				count(b);
 				System.out.printf("%d | %s | %s |  %s  | %d \n|   %s    |\n", b.getBoardNO(), b.getBoardTitle(), b.getMemberName(), b.getCreateDate(), b.getBoardCount(), b.getBoardContent());
 				System.out.println("================================");
 				comList = cService.commentList(b.getBoardNO());
@@ -408,5 +408,9 @@ public class BoardView {
 			}
 			
 		}while(input != 0);
+	}
+
+	public void count(Board board) {
+		service.count(board);
 	}
 }
