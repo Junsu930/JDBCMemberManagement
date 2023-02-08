@@ -2,5 +2,8 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<comment>comment-query.xml file</comment>
-	<entry key="commentList">SELECT COMMENT_NO, COMMENT_CONTENT, CREATE_DT, DELETE_FL, MEMBER_NO, BOARD_NO, MEMBER_NM FROM "COMMENT" JOIN "MEMBER" USING (MEMBER_NO) WHERE MEMBER_NO = ? ORDER BY CREATE_DT</entry>
+	<entry key="commentList">SELECT COMMENT_NO, COMMENT_CONTENT, CREATE_DT, DELETE_FL, MEMBER_NO, BOARD_NO, MEMBER_NM FROM "COMMENT" JOIN "MEMBER" USING (MEMBER_NO) WHERE BOARD_NO = ? ORDER BY CREATE_DT</entry>
+	<entry key="writeComment">INSERT INTO "COMMENT"(COMMENT_NO, COMMENT_CONTENT, MEMBER_NO, BOARD_NO) VALUES (SEQ_COMMENT_NO.NEXTVAL, ?, ?, ?)</entry>
+	<entry key="editComment">UPDATE "COMMENT" SET COMMENT_CONTENT = ? WHERE COMMENT_NO = ?</entry>
+	<entry key="deleteComment">DELETE FROM "COMMENT" WHERE COMMENT_NO = ?</entry>
 </properties>
