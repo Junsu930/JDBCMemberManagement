@@ -74,7 +74,7 @@ public class MainView {
 					switch(input) {
 					
 					case 1: memberView.memberMenu(LoginMember); break; //회원 기능 서브 메뉴 출력
-					case 2: boardView.boardMenu(); break; //게시판 기능 서브 메뉴 출력 
+					case 2: boardView.boardMenu(LoginMember); break; //게시판 기능 서브 메뉴 출력 
 					case 0: LoginMember = null; // 로그아웃 == loginMember가 참조하는 객체 없음 (==null) 
 					System.out.println("\n[로그아웃 되었습니다.]\n");
 					input = -1; // do-while문이 종료되지 않도록 0이 아닌 값으로 변경

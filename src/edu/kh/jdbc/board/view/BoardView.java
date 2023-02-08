@@ -8,6 +8,7 @@ import edu.kh.jdbc.board.model.service.BoardService;
 import edu.kh.jdbc.board.model.service.CommentService;
 import edu.kh.jdbc.board.model.vo.Board;
 import edu.kh.jdbc.board.model.vo.Comment;
+import edu.kh.jdbc.member.vo.Member;
 
 public class BoardView {
 
@@ -15,10 +16,12 @@ public class BoardView {
 	List<Comment> comList = new ArrayList<>();
 	BoardService service = new BoardService();
 	CommentService cService = new CommentService();
+	Member loginMember;
 	
 	Scanner sc = new Scanner(System.in);
 
-	public void boardMenu() {
+	public void boardMenu(Member LoginMember) {
+		loginMember = LoginMember;
 		int input = -1;
 		
 		do {
@@ -35,7 +38,7 @@ public class BoardView {
 			switch(input) {
 			
 			case 1: boardList(); break;
-			case 2: boardDetail(); break;
+			case 2: boardDetail(loginMember); break;
 			case 3: 
 			case 4: 
 			case 0: return;
@@ -94,10 +97,11 @@ public class BoardView {
 	
 	}
 
-	public void boardDetail() {
+	public void boardDetail(Member loginMember) {
 		
 		boardList();
 		
+		Board board = new Board(); // 상세 메뉴에 보낼 게시글 
 		System.out.print("게시글을 선택하세요 : ");
 		int input = sc.nextInt();
 		
@@ -106,7 +110,8 @@ public class BoardView {
 		
 		for(Board b : boardList) {
 			if(b.getBoardNO() == input) {
-	
+				
+				board = b;
 				System.out.printf("%d | %s | %s |  %s  | %d \n|   %s    |\n", b.getBoardNO(), b.getBoardTitle(), b.getMemberName(), b.getCreateDate(), b.getBoardCount(), b.getBoardContent());
 				
 				comList = cService.commentList(b.getBoardNO());
@@ -120,6 +125,42 @@ public class BoardView {
 		
 		if(!flag) {
 			System.out.println("찾는 번호가 없습니다.");
+			return;
 		}
+		
+		do {
+			if(loginMember.getMemberNo() == board.getMemberNo()) {
+				System.out.println("***메뉴***");
+				System.out.println("댓글 작성");
+				System.out.println("댓글 수정");
+				System.out.println("댓글 삭제");
+				System.out.println("게시글 수정");
+				System.out.println("게시글 삭제");
+				commentMenu1(loginMember, board); break;
+			}else {
+				System.out.println("***메뉴***");
+				System.out.println("댓글 작성");
+				System.out.println("댓글 수정");
+				System.out.println("댓글 삭제");
+				commentMenu2(loginMember, board); break;
+			}
+		
+			
+		}while(input != 0);
+	}
+
+
+	public void commentMenu1(Member loginMember, Board board) { // 게시글 본인의 글일 경우
+		int input = -1;
+		do {
+			System.out.print("메뉴 입력 : ");
+			
+		}while(input != 0);
+		
+		
+	}
+	
+	public void commentMenu2(Member loginMember, Board board) { // 게시글 본인의 글이 아닐 경우
+		
 	}
 }
