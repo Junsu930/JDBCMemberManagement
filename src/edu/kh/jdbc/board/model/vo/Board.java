@@ -12,10 +12,8 @@ public class Board {
 	private String memberName;
 	private int boardCommentCount;
 	
-
 	public Board() {}
 
-	
 	public Board(int boardNO, String boardTitle, String createDate, int readCount, String memberName, int boardCommentCount) {
 		super();
 		this.boardNO = boardNO;
@@ -25,7 +23,6 @@ public class Board {
 		this.memberName = memberName;
 		this.boardCommentCount = boardCommentCount;
 	}
-
 
 	public Board(int boardNO, String boardTitle, String boardContent, String createDate, int readCount, String deleteFl,
 			int memberNo, String memberName, int boardCommentCount) {
@@ -95,8 +92,4 @@ public class Board {
 	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
 	}
-	
-	
-
-	
 }

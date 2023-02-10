@@ -80,12 +80,12 @@ public class MainService {
 	public List<Member> selectAll() throws Exception{
 		List<Member> memberList = new ArrayList<Member>();
 		
-		Connection conn = getConnection();
+		Connection conn = getConnection(); // 커넥션 생성
 		
 		memberList = dao.selectAll(conn);
 		
+		close(conn); // 커넥션 반환
 		
-		close(conn);
 		return memberList;
 	}
 
@@ -100,6 +100,7 @@ public class MainService {
 		else rollback(conn);
 		
 		close(conn);
+		
 		return result;
 	}
 

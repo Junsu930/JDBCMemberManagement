@@ -24,6 +24,7 @@ public class MainDAO {
 	// Map<String, String> 제한, XML 파일 읽고 쓰는 데 특화
 	private Properties memberProp = null;
 	
+	// 기본생성자
 	public MainDAO() {
 		
 		try {
@@ -34,7 +35,7 @@ public class MainDAO {
 			memberProp.loadFromXML(new FileInputStream("member-query.xml"));
 			
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -140,18 +141,27 @@ public class MainDAO {
 
 
 
+	/** 회원 목록 조회 DAO
+	 * @param conn
+	 * @return memberList
+	 * @throws Exception
+	 */
 	public List<Member> selectAll(Connection conn) throws Exception {
 		List<Member> memberList = new ArrayList<Member>();
 		try {
+			// SQL 얻어오기
 			String sql = memberProp.getProperty("selectAll");
 			stmt = conn.createStatement();
+			// 수행 후 ResultSet 반환
 			rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {
+				// 컬럼 값을 얻어와 Member객체 저장 후 List에 추가
 				memberList.add(new Member(rs.getString("MEMBER_ID"), rs.getString("MEMBER_NM"), rs.getString("MEMBER_GENDER")));
 			}
 			
 		}finally {
+			// 객체 자원 반환
 			close(rs);
 			close(stmt);
 		}
@@ -181,8 +191,13 @@ public class MainDAO {
 		return result;
 	}
 
+	/** 회원 탈퇴 메서드
+	 * @param conn
+	 * @param loginMember
+	 * @return result
+	 * @throws Exception
+	 */
 	public int secession(Connection conn, Member loginMember) throws Exception {
-		
 		
 		int result = 0;
 		
@@ -200,7 +215,5 @@ public class MainDAO {
 		}
 		return result;
 	}
-	
-	
 
 }

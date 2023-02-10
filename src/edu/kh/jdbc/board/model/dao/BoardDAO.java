@@ -30,13 +30,15 @@ public class BoardDAO {
 			propc.loadFromXML(new FileInputStream("comment-query.xml"));
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 
+	/** 게시글 목록 조회 DAO
+	 * @param conn
+	 * @return boardList
+	 * @throws Exception
+	 */
 	public List<Board> boardList(Connection conn) throws Exception{
 		String sql = prop.getProperty("boardList");
 		stmt = conn.createStatement();
@@ -54,14 +56,14 @@ public class BoardDAO {
 			int memberNo = rs.getInt("MEMBER_NO");
 			int boardCommentCount = rs.getInt("COMMENT_COUNT");
 			
-			
 			Board board = new Board(boardNo, boardTitle, boardContent, createDate, readCount, deleteFl, memberNo, memberName, boardCommentCount);
 			
 			boardList.add(board);
 		}
 		
 		close(rs);
-		close(pstmt);
+		close(stmt);
+		
 		return boardList;
 	}
 
@@ -123,8 +125,6 @@ public class BoardDAO {
 		} finally {
 			close(pstmt);
 		}
-		
-		
 		return result;
 	}
 
@@ -197,6 +197,10 @@ public class BoardDAO {
 		}
 		
 		return result;
+	}
+
+	public int nextBoardNo(Connection conn) {
+		return 0;
 	}
 
 }

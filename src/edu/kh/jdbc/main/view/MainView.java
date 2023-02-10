@@ -15,7 +15,7 @@ public class MainView {
 	private Scanner sc = new Scanner(System.in);
 	
 	// 로그인된 회원 정보를 저장한 객체 참조 변수
-	private static Member LoginMember = null;
+	public static Member LoginMember = null;
 	// -> 로그인 X == null
 	// -> 로그인 O != null
 	private MainService service = new MainService();

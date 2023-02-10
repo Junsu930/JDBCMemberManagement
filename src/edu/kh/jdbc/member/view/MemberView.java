@@ -1,13 +1,15 @@
 package edu.kh.jdbc.member.view;
 
 import java.util.List;
-import java.util.Scanner;
 
+import java.util.Scanner;
+import static edu.kh.jdbc.main.view.MainView.*;
 import edu.kh.jdbc.main.model.service.MainService;
 import edu.kh.jdbc.main.view.MainView;
 import edu.kh.jdbc.member.vo.Member;
 
 public class MemberView {
+	
 	
 	private Scanner sc = new Scanner(System.in);
 	private Member loginMember = null;
@@ -15,6 +17,9 @@ public class MemberView {
 	private MainService service = new MainService();
 	
 
+	/** 회원 기능 메뉴
+	 * @param LoginMember (회원 기능 정보)
+	 */
 	public void memberMenu(Member LoginMember) {
 		
 		this.loginMember = LoginMember;
@@ -48,8 +53,7 @@ public class MemberView {
 			case 3: updateMember(loginMember); break;
 			case 4: updatePw(loginMember); break;
 			case 5: if(secession(loginMember) == 1) {
-				MainView mv = new MainView(); 
-				mv.mainMenu(); break;
+				input=0; break;
 			}else{
 				break;
 			}
@@ -80,7 +84,7 @@ public class MemberView {
 							if(result > 0) {
 								System.out.println("탈퇴가 완료되었습니다.");
 								// 완료되면 로그아웃되고 초기 메뉴로 돌아간다.
-								 
+								LoginMember=null;
 								return 1;
 								
 							}else{
@@ -156,59 +160,69 @@ public class MemberView {
 		
 	}
 
+	/** 
+	 * 회원 목록 조회
+	 */
 	private void selectAll() {
+		System.out.println("회원 목록 조회(탈퇴 회원 미포함)");
 		MainService service = new MainService();
 		try {
-			memberList = service.selectAll();
+			memberList = service.selectAll(); // 회원 목록 조회 서비스 호출 후 결과 반환 받기
+			// 조회 결과 없으면 없다고 출력
+			if(memberList.isEmpty()) {
+				System.out.println("조회 결과가 없습니다.");
+			}else {
+				for(Member i : memberList) {
+					System.out.println(i.toString2()); 
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		for(Member i : memberList) {
-			System.out.println(i.toString2()); 
-			
-		}
-		
 	}
 
-	/** 내 정보 조회 매서드
+	/** 내 정보 조회 메서드
 	 * 
 	 */
 	public void selectMyInfo() {
+		System.out.println("내 정보 조회");
 		System.out.println(loginMember.toString());
 	}
 	
+	/** 멤버 정보 수정 메서드
+	 * @param loginMember
+	 */
 	public void updateMember(Member loginMember) {
 		System.out.println("***정보 수정***");
 		System.out.print("변경할 이름 : ");
 		String name = sc.nextLine();
 		loginMember.setMemberName(name);
-		
+		String gender = null;
 		while(true) {
 			System.out.print("변경할 성별 입력(M/F) : ");
-			String gender = sc.next().toUpperCase();
+			gender = sc.next().toUpperCase();
 			
 			System.out.println();
 			if(gender.equals("M") || gender.equals("F")) {
 				loginMember.setMemberGender(gender);
-				try {
-					int result = service.updateMember(loginMember);
-					
-					if(result > 0) {
-						System.out.println("변경 완료");
-						break;
-					}else {
-						System.out.println("변경 중 오류 발생");
-					}
-				} catch (Exception e) {
-					System.out.println("변경 중 오류 발생");
-				}
-				
+				break;
 			}else {
 				System.out.println("[M 또는 F만 입력하세요!");
 			}
-			System.out.println();
+		}
+		
+		try {
+			int result = service.updateMember(loginMember);
+			
+			if(result > 0) {
+				System.out.println("변경 완료");
+			}else {
+				System.err.println(result);
+				System.out.println("변경 중 오류 발생");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("변경 중 오류 발생");
 		}
 	}
-
 }

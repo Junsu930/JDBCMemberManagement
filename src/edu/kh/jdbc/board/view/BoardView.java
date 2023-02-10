@@ -35,6 +35,8 @@ public class BoardView {
 			input = sc.nextInt();
 			sc.nextLine();
 			
+			System.out.println();
+			
 			switch(input) {
 			
 			case 1: boardList(); break;
@@ -134,8 +136,9 @@ public class BoardView {
 				if(b.getBoardNO() == input) {
 					board = b;
 					count(b);
+					System.out.println("|no|     글 제목      | 작성자 |     작성일     | 조회수|");
 					System.out.printf("%d | %s | %s |  %s  | %d \n|   %s    |\n", b.getBoardNO(), b.getBoardTitle(), b.getMemberName(), b.getCreateDate(), b.getBoardCount(), b.getBoardContent());
-					System.out.println("================================");
+					System.out.println("===============댓글창=================");
 					comList = cService.commentList(b.getBoardNO());
 					for(Comment c : comList) {
 						System.out.println( c.getCommentNo()+  " | " + c.getCommentContent() + " | " + c.getMemberName() + " | "+ c.getCreateDt());
@@ -180,7 +183,7 @@ public class BoardView {
 		System.out.print("글 제목을 입력하세요 : ");
 		String titleInput = sc.nextLine();
 		System.out.println("내용을 입력하세용 : ");
-		String contentInput = sc.nextLine();
+		String contentInput = inputContent();
 		
 		int result = service.writeBoard(titleInput, contentInput, loginMember);
 		
@@ -190,27 +193,53 @@ public class BoardView {
 		}else {
 			System.out.println("등록 실패");
 		}
+	}
+
+	/** 내용 입력하는 메서드
+	 * @return
+	 */
+	private String inputContent() {
+		String content = ""; // 빈 문자열
+		String input = null; // 참조하는 객체가 없음
 		
+		System.out.println("입력 종료 시 ($exit) 입력");
+		
+		while(true) {
+			input = sc.nextLine();
+			
+			if(input.equals("$exit")) {
+				break;
+			}
+			
+			content += input + "\n";
+		}
+		
+		return content;
 	}
 
 
+	/**
+	 * 게시글 목록 조회
+	 */
 	public void boardList() {
 		System.out.println("-----게시글 목록-----");
-	
-		
-		
 		try {
 			boardList = service.boardList();
-			for(Board b : boardList) {
-				System.out.println(b.getBoardNO() + " | " + b.getBoardTitle() + "["+ b.getBoardCount() +"] | " + b.getMemberName() +" | " + b.getCreateDate() +" | " 
-			+ b.getReadCount() + " | ");
-				
+			
+			if(boardList.isEmpty()) {
+				System.out.println("게시글이 존재하지 않습니다.");
+			}else {
+				System.out.println("|no| 글 제목 [댓글수]| 작성자 |     작성일     | 조회수|"  );
+				for(Board b : boardList) {
+					System.out.println(b.getBoardNO() + " | " + b.getBoardTitle() + "["+ b.getBoardCount() +"] | " + b.getMemberName() +" | " + b.getCreateDate() +" | " 
+							+ b.getReadCount() + " | ");
+				}
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("게시글 목록 조회 중 예외 발생");
 		}
-	
 	}
 
 	public void boardDetail(Member loginMember) {
@@ -229,8 +258,9 @@ public class BoardView {
 				
 				board = b;
 				count(b);
+				System.out.println("|no|     글 제목      | 작성자 |     작성일     | 조회수|");
 				System.out.printf("%d | %s | %s |  %s  | %d \n|   %s    |\n", b.getBoardNO(), b.getBoardTitle(), b.getMemberName(), b.getCreateDate(), b.getBoardCount(), b.getBoardContent());
-				System.out.println("================================");
+				System.out.println("===============댓글창=================");
 				comList = cService.commentList(b.getBoardNO());
 				for(Comment c : comList) {
 					System.out.println( c.getCommentNo()+  " | " + c.getCommentContent() + " | " + c.getMemberName() + " | "+ c.getCreateDt());
@@ -281,10 +311,9 @@ public class BoardView {
 			case 2:	editComment(loginMember, board); break; // 댓글 수정
 			case 3:	deleteComment(loginMember, board); break;
 			case 4:	editBoard(loginMember, board); break;
-			case 5: deleteBoard(loginMember, board); break;
+			case 5: deleteBoard(loginMember, board); boardMenu(loginMember); break;
 			default: System.out.println("정확한 번호를 입력하세요"); break;
-			
-				
+		
 			}
 			
 		}while(input != 0);
@@ -309,9 +338,7 @@ public class BoardView {
 			}else {
 				System.out.println("다시 입력해주세요");
 			}
-			
 		}
-		
 	}
 
 
