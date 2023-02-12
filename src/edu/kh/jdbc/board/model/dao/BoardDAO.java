@@ -33,6 +33,8 @@ public class BoardDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	/** 게시글 목록 조회 DAO
 	 * @param conn
@@ -108,15 +110,16 @@ public class BoardDAO {
 		return result;
 	}
 
-	public int writeBoard(Connection conn, String titleInput, String contentInput, Member loginMember) {
+	public int writeBoard(Connection conn, String titleInput, String contentInput, Member loginMember, int boardNo) {
 		int result = 0;
 		try {
 			String sql = prop.getProperty("writeBoard");
 			//INSERT INTO BOARD VALUES(SEQ_BOARD_NO.NEXTVAL, ?, ?, DEFAULT, 0, DEFAULT, ?)
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, titleInput);
-			pstmt.setString(2, contentInput);
-			pstmt.setInt(3, loginMember.getMemberNo());
+			pstmt.setInt(1, boardNo);
+			pstmt.setString(2, titleInput);
+			pstmt.setString(3, contentInput);
+			pstmt.setInt(4, loginMember.getMemberNo());
 			
 			result = pstmt.executeUpdate();
 			
@@ -199,8 +202,25 @@ public class BoardDAO {
 		return result;
 	}
 
-	public int nextBoardNo(Connection conn) {
-		return 0;
+	public int nextBoardNo(Connection conn) throws Exception {
+		int boardNo = 0;
+		
+		try {
+			String sql = prop.getProperty("nextBoardNo");
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				boardNo = rs.getInt(1); // 첫 번째 컬럼값을 얻어와 boardNo에 저장
+			}
+			
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		
+		
+		return boardNo;
 	}
 
 }

@@ -54,7 +54,7 @@ public class BoardService {
 	}
 
 
-	public int writeBoard(String titleInput, String contentInput, Member loginMember) {
+	public int writeBoard(String titleInput, String contentInput, Member loginMember) throws Exception {
 		int result = 0;
 		conn = getConnection();
 		
@@ -64,7 +64,9 @@ public class BoardService {
 		// -> 게시글 등록 서비스를 호출한 순서대로
 		// 미리 게시글 번호를 생성해서 얻어온 다음 이를 이용해 insert 진행
 		int boardNo = dao.nextBoardNo(conn);
-		result = dao.writeBoard(conn, titleInput, contentInput, loginMember);
+		
+		
+		result = dao.writeBoard(conn, titleInput, contentInput, loginMember, boardNo);
 		
 		if(result>0) commit(conn);
 		else rollback(conn);
