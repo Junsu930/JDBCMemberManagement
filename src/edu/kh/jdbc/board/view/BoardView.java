@@ -135,8 +135,10 @@ public class BoardView {
 			for(Board b : boardList) {
 				if(b.getBoardNO() == input) {
 					board = b;
-					count(b);
-					System.out.println("|no|     글 제목      | 작성자 |     작성일     | 조회수|");
+					if(b.getMemberNo()!=loginMember.getMemberNo()) {
+						count(b);
+					}
+					System.out.println("|no|     글 제목      | 작성자 |     작성일     | 댓글수|");
 					System.out.printf("%d | %s | %s |  %s  | %d \n|   %s    |\n", b.getBoardNO(), b.getBoardTitle(), b.getMemberName(), b.getCreateDate(), b.getBoardCount(), b.getBoardContent());
 					System.out.println("===============댓글창=================");
 					comList = cService.commentList(b.getBoardNO());
@@ -185,14 +187,20 @@ public class BoardView {
 		System.out.println("내용을 입력하세용 : ");
 		String contentInput = inputContent();
 		
-		int result = service.writeBoard(titleInput, contentInput, loginMember);
-		
-		if (result > 0) {
-			System.out.println("글이 등록되었습니다.");
-			boardDetail(loginMember);
-		}else {
-			System.out.println("등록 실패");
+		int result;
+		try {
+			result = service.writeBoard(titleInput, contentInput, loginMember);
+			if (result > 0) {
+				System.out.println("글이 등록되었습니다.");
+				boardDetail(loginMember);
+			}else {
+				System.out.println("등록 실패");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 	}
 
 	/** 내용 입력하는 메서드
@@ -257,8 +265,10 @@ public class BoardView {
 			if(b.getBoardNO() == input) {
 				
 				board = b;
-				count(b);
-				System.out.println("|no|     글 제목      | 작성자 |     작성일     | 조회수|");
+				if(b.getMemberNo()!=loginMember.getMemberNo()) {
+					count(b);
+				}
+				System.out.println("|no|     글 제목      | 작성자 |     작성일     | 댓글수|");
 				System.out.printf("%d | %s | %s |  %s  | %d \n|   %s    |\n", b.getBoardNO(), b.getBoardTitle(), b.getMemberName(), b.getCreateDate(), b.getBoardCount(), b.getBoardContent());
 				System.out.println("===============댓글창=================");
 				comList = cService.commentList(b.getBoardNO());
